@@ -6,7 +6,7 @@ A self-contained Docker setup for [LimeSurvey Community Edition](https://communi
 
 - **app** — Ubuntu 24.04 + Apache 2.4 + PHP 8.5 + LimeSurvey Community
 - **db** — MySQL 8
-- `setup.sh` — interactive first-time credential setup with validation; prints a field-by-field reference for the web installer
+- `setup.sh` — interactive first-time credential setup with validation; offers to build and start containers; prints a field-by-field reference for the web installer
 - `update.sh` — auto-detects new LimeSurvey releases and rebuilds
 - `backup.sh` — snapshots `./data/` to `./backups/`, retains last 7
 - `reset.sh` — wipes database/config (or full reset) with a guided export checklist to prevent data loss
@@ -27,9 +27,9 @@ Docker Desktop on Mac handles the build natively. No extra configuration needed.
 git clone https://github.com/ctrlaltdtl/limesurvey-docker.git
 cd limesurvey-docker
 ./setup.sh
-docker compose build
-docker compose up -d
 ```
+
+`setup.sh` will offer to run `docker compose build` and `docker compose up -d` for you at the end.
 
 ### Linux AMD64 server
 
@@ -39,8 +39,6 @@ Build directly on the server — no cross-platform build required.
 git clone https://github.com/ctrlaltdtl/limesurvey-docker.git
 cd limesurvey-docker
 ./setup.sh
-docker compose build
-docker compose up -d
 ```
 
 > If moving from a Mac to a server, re-run `./setup.sh` on the server to generate a fresh `.env`. Copy your `./data/` directory across to preserve existing surveys and database.
@@ -53,15 +51,10 @@ git clone https://github.com/ctrlaltdtl/limesurvey-docker.git
 cd limesurvey-docker
 
 # 2. Run setup — validates credentials, writes .env, creates ./data/ directories
+#    and offers to build and start containers in one go
 ./setup.sh
 
-# 3. Build the app image
-docker compose build
-
-# 4. Start both containers
-docker compose up -d
-
-# 5. Open the installer in your browser
+# 3. Open the installer in your browser
 open http://localhost:8505/limesurvey/admin/
 ```
 
