@@ -137,11 +137,22 @@ info "Created ./data/ directories for bind mounts"
 # ── Done ────────────────────────────────────────────────────────────────────
 
 echo
-info "Setup complete. Next steps:"
+info "Setup complete."
 echo
-echo "  1. docker compose build     (skip if image is already built)"
-echo "  2. docker compose up -d"
-echo "  3. Open http://localhost:8505/limesurvey/admin/"
+
+read -rp "Run docker compose build now? [Y/n] " do_build || true
+if [[ ! "${do_build:-}" =~ ^[Nn]$ ]]; then
+    docker compose build || warn "Build encountered an issue — check output above"
+fi
+
+echo
+read -rp "Run docker compose up -d now? [Y/n] " do_up || true
+if [[ ! "${do_up:-}" =~ ^[Nn]$ ]]; then
+    docker compose up -d || warn "Failed to start containers — check output above"
+fi
+
+echo
+echo "  Once running, open: http://localhost:8505/limesurvey/admin/"
 echo
 echo "  The LimeSurvey installer will walk you through two screens:"
 echo
