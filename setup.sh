@@ -139,14 +139,30 @@ info "Created ./data/ directories for bind mounts"
 echo
 info "Setup complete. Next steps:"
 echo
-echo "  1. docker compose build"
+echo "  1. docker compose build     (skip if image is already built)"
 echo "  2. docker compose up -d"
 echo "  3. Open http://localhost:8505/limesurvey/admin/"
-echo "  4. Complete the LimeSurvey web installer using:"
-echo "     → Database host: db"
-echo "     → Database name: ${MYSQL_DATABASE}"
-echo "     → Username:      ${MYSQL_USER}"
-echo "     → Password:      (the one you just set)"
+echo
+echo "  The LimeSurvey installer will walk you through two screens:"
+echo
+echo "  ┌─ Step 1: Database configuration ──────────────────────────────────┐"
+echo "  │  Database type:     MySQL                                         │"
+echo "  │  Database location: db          ← the Docker service name, not   │"
+echo "  │                                   'localhost' or '127.0.0.1'      │"
+printf "  │  %-20s %-46s│\n" "  Database user:"     "${MYSQL_USER}"
+printf "  │  %-20s %-46s│\n" "  Database password:" "(the MySQL User Password you just set)"
+printf "  │  %-20s %-46s│\n" "  Database name:"     "${MYSQL_DATABASE}"
+echo "  │  Table prefix:      lime_        ← default, fine to keep          │"
+echo "  └───────────────────────────────────────────────────────────────────┘"
+echo
+echo "  ┌─ Step 2: Optional settings ────────────────────────────────────────┐"
+echo "  │  Survey name:    your organisation or project name                │"
+echo "  │  Admin email:    your email address (used for system alerts)      │"
+echo "  │  Admin name:     your full name or display name                   │"
+echo "  │  Admin username: the login name you want for the admin account    │"
+echo "  │  Admin password: a strong password for the LimeSurvey admin UI   │"
+echo "  │                  (separate from the MySQL password above)         │"
+echo "  └───────────────────────────────────────────────────────────────────┘"
 echo
 warn ".env is gitignored — back it up securely. Losing it means reconfiguring MySQL."
 echo
