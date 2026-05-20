@@ -90,7 +90,12 @@ docker compose down
 
 for dir in "${WIPE_DIRS[@]}"; do
     if [[ -d "$dir" ]]; then
-        rm -rf "$dir"
+        RM_EXIT=0
+        rm -rf "$dir" 2>/dev/null || RM_EXIT=$?
+        if [[ $RM_EXIT -ne 0 ]]; then
+            warn "Some files are owned by Docker container users — retrying with sudo..."
+            sudo rm -rf "$dir" || die "Failed to remove ${dir} — try: sudo rm -rf ${dir}"
+        fi
         info "Removed ./${dir}/"
     fi
 done
