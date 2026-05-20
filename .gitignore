@@ -1,6 +1,9 @@
 # LimeSurvey Docker — runtime data (bind mounts, never commit)
 data/
 
+# Backups
+backups/
+
 # Secrets
 .env
 

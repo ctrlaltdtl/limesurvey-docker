@@ -1,0 +1,11 @@
+.env
+.git
+data/
+backups/
+skills.md
+README.md
+CLAUDE.md
+update.sh
+setup.sh
+.gitignore
+.gitattributes

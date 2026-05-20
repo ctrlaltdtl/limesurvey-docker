@@ -13,4 +13,10 @@ if [ ! -f "${CONFIG_DIR}/internal.php" ]; then
     echo "[entrypoint] Config directory initialized"
 fi
 
+# Lock down config.php written by the installer on previous runs
+if [ -f "${CONFIG_DIR}/config.php" ]; then
+    chmod 640 "${CONFIG_DIR}/config.php"
+    chown www-data:www-data "${CONFIG_DIR}/config.php"
+fi
+
 exec apache2ctl -D FOREGROUND
