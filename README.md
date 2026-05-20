@@ -6,8 +6,10 @@ A self-contained Docker setup for [LimeSurvey Community Edition](https://communi
 
 - **app** — Ubuntu 24.04 + Apache 2.4 + PHP 8.5 + LimeSurvey Community
 - **db** — MySQL 8
-- `setup.sh` — interactive first-time credential setup with validation
+- `setup.sh` — interactive first-time credential setup with validation; prints a field-by-field reference for the web installer
 - `update.sh` — auto-detects new LimeSurvey releases and rebuilds
+- `backup.sh` — snapshots `./data/` to `./backups/`, retains last 7
+- `reset.sh` — wipes database/config (or full reset) with a guided export checklist to prevent data loss
 - All data persisted to `./data/` via bind mounts — survives restarts, easy to back up and move between servers
 
 ## Requirements
@@ -106,6 +108,12 @@ docker compose logs db
 
 # Update LimeSurvey to a new release
 ./update.sh
+
+# Snapshot ./data/ to ./backups/
+./backup.sh
+
+# Wipe and reconfigure (e.g. after a credential typo)
+./reset.sh
 ```
 
 ## Updating LimeSurvey
@@ -126,6 +134,42 @@ To rebuild manually with a specific URL:
 docker compose build --no-cache
 docker compose up -d
 ```
+
+## Backup
+
+Run `./backup.sh` at any time to snapshot `./data/` into `./backups/`:
+
+```bash
+./backup.sh
+```
+
+Backups are timestamped `limesurvey_backup_YYYYMMDD_HHMMSS.tar.gz`. The script automatically removes the oldest backups beyond the last 7.
+
+To restore, stop the containers and extract the archive:
+
+```bash
+docker compose down
+tar -xzf backups/limesurvey_backup_<timestamp>.tar.gz
+docker compose up -d
+```
+
+## Reset
+
+Use `./reset.sh` to wipe and start fresh — for example if you made a credential typo during setup:
+
+```bash
+./reset.sh
+```
+
+The script will:
+1. Warn you to export any surveys and responses from the LimeSurvey UI first
+2. Offer to run `backup.sh` before wiping
+3. Let you choose the reset scope:
+   - **Database + config only** — wipes MySQL data and config, keeps uploads (use this for credential typos)
+   - **Full reset** — also wipes uploads
+4. Stop the containers, remove the selected directories, and offer to re-run `setup.sh`
+
+> **Before resetting:** export survey structures (`.lss`) and responses from `Surveys → Export` in the LimeSurvey admin UI. Archived/inactive surveys should also be exported.
 
 ## Data
 
