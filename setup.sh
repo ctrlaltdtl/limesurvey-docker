@@ -118,19 +118,20 @@ read -rp "Write .env with these values? [y/N] " confirm || true
 
 # ── Write .env ──────────────────────────────────────────────────────────────
 
-cat > .env <<EOF
+cat > .env <<EOF || die "Failed to write .env — check directory permissions (try: sudo chown -R \$(whoami) .)"
 MYSQL_ROOT_PASSWORD="${MYSQL_ROOT_PASSWORD}"
 MYSQL_DATABASE="${MYSQL_DATABASE}"
 MYSQL_USER="${MYSQL_USER}"
 MYSQL_PASSWORD="${MYSQL_PASSWORD}"
 EOF
 
-chmod 600 .env
+chmod 600 .env || die "Failed to set permissions on .env"
 info ".env written and locked (chmod 600)"
 
 # ── Create data directories ─────────────────────────────────────────────────
 
-mkdir -p data/mysql data/upload data/config
+mkdir -p data/mysql data/upload data/config \
+    || die "Failed to create ./data/ directories — check directory permissions (try: sudo chown -R \$(whoami) .)"
 info "Created ./data/ directories for bind mounts"
 
 # ── Done ────────────────────────────────────────────────────────────────────
