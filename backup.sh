@@ -21,7 +21,13 @@ mkdir -p "$BACKUP_DIR"
 
 info "Backing up ./data/ to ${BACKUP_FILE}..."
 
-tar -czf "$BACKUP_FILE" data/
+TAR_EXIT=0
+tar -czf "$BACKUP_FILE" data/ || TAR_EXIT=$?
+
+if [[ $TAR_EXIT -ne 0 ]]; then
+    warn "Some files were skipped due to permission denied (MySQL SSL keys — auto-regenerated on next start)"
+    warn "The backup is still valid for config and upload data"
+fi
 
 SIZE=$(du -sh "$BACKUP_FILE" | cut -f1)
 info "Backup complete: ${BACKUP_FILE} (${SIZE})"
