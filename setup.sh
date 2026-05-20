@@ -153,6 +153,7 @@ printf "  │  %-20s %-46s│\n" "  Database user:"     "${MYSQL_USER}"
 printf "  │  %-20s %-46s│\n" "  Database password:" "(the MySQL User Password you just set)"
 printf "  │  %-20s %-46s│\n" "  Database name:"     "${MYSQL_DATABASE}"
 echo "  │  Table prefix:      lime_        ← default, fine to keep          │"
+echo "  │  DB engine:         InnoDB       ← required; do NOT use MyISAM    │"
 echo "  └───────────────────────────────────────────────────────────────────┘"
 echo
 echo "  ┌─ Step 2: Optional settings ────────────────────────────────────────┐"
