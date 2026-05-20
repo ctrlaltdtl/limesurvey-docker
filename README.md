@@ -2,6 +2,8 @@
 
 A self-contained Docker setup for [LimeSurvey Community Edition](https://community.limesurvey.org/) with a bundled MySQL 8 database. Runs on macOS (Apple Silicon and Intel) and Linux AMD64 servers.
 
+> **Internal use only.** This setup is intended for closed, private networks. It runs over plain HTTP and is not hardened for public internet exposure. Do not expose it directly to the internet without a reverse proxy with HTTPS/TLS in front of it.
+
 ## What's included
 
 - **app** — Ubuntu 24.04 + Apache 2.4 + PHP 8.5 + LimeSurvey Community
