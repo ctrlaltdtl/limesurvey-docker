@@ -1,0 +1,37 @@
+services:
+  db:
+    image: mysql:8
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    volumes:
+      - ./data/mysql:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "--silent"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    networks:
+      - limesurvey_net
+
+  app:
+    build: .
+    restart: unless-stopped
+    ports:
+      - "8505:80"
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - ./data/upload:/var/www/html/limesurvey/upload
+      - ./data/config:/var/www/html/limesurvey/application/config
+    networks:
+      - limesurvey_net
+
+networks:
+  limesurvey_net:
+    driver: bridge
