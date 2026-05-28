@@ -11,6 +11,14 @@ if [ ! -f "${CONFIG_DIR}/internal.php" ]; then
     cp -rp "${TEMPLATE_DIR}/." "${CONFIG_DIR}/"
     chown -R www-data:www-data "${CONFIG_DIR}"
     echo "[entrypoint] Config directory initialized"
+else
+    # On upgrades, refresh all template files except config.php (DB credentials set by installer)
+    for src in "${TEMPLATE_DIR}"/*; do
+        fname=$(basename "$src")
+        [ "$fname" = "config.php" ] && continue
+        cp -rp "$src" "${CONFIG_DIR}/$fname"
+    done
+    chown -R www-data:www-data "${CONFIG_DIR}"
 fi
 
 # Lock down config.php written by the installer on previous runs

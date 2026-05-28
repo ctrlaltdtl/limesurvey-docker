@@ -18,9 +18,9 @@ die()   { error "$1"; exit 1; }
 
 echo
 echo -e "${RED}╔══════════════════════════════════════════════════════════════╗${NC}"
-echo -e "${RED}║                      ⚠  WARNING                             ║${NC}"
+echo -e "${RED}║                      ⚠  WARNING                              ║${NC}"
 echo -e "${RED}║                                                              ║${NC}"
-echo -e "${RED}║  This will wipe your LimeSurvey database and/or files.      ║${NC}"
+echo -e "${RED}║  This will wipe your LimeSurvey database and/or files.       ║${NC}"
 echo -e "${RED}║  All surveys, responses, and settings will be lost.          ║${NC}"
 echo -e "${RED}╚══════════════════════════════════════════════════════════════╝${NC}"
 echo

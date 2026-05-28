@@ -37,7 +37,7 @@ RUN a2ensite limesurvey.conf && a2dissite 000-default
 
 # To update LimeSurvey: change LIMESURVEY_URL to the new zip from https://community.limesurvey.org/downloads/
 # then run: docker compose build --no-cache && docker compose up -d
-ARG LIMESURVEY_URL=https://download.limesurvey.org/latest-master/limesurvey6.17.3+260512.zip
+ARG LIMESURVEY_URL=https://download.limesurvey.org/latest-master/limesurvey7.0.0+260526.zip
 
 # Download and install LimeSurvey
 # -f fails loudly on HTTP errors, -L follows redirects

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -uo pipefail
+set -euo pipefail
 
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -75,7 +75,7 @@ fi
     || die "URL does not look like a LimeSurvey download: $NEW_URL"
 
 info "Verifying URL is reachable..."
-HTTP_STATUS=$(curl -sI --max-time 15 "$NEW_URL" | grep -oE 'HTTP/[0-9.]+ [0-9]+' | grep -oE '[0-9]+$' | head -1)
+HTTP_STATUS=$(curl -sL --max-time 15 -o /dev/null -w "%{http_code}" "$NEW_URL")
 
 [[ "$HTTP_STATUS" == "200" ]] \
     || die "URL returned HTTP ${HTTP_STATUS:-unknown} — check the URL and try again"
@@ -84,8 +84,8 @@ info "URL verified (HTTP 200)"
 
 # ── Update Dockerfile ────────────────────────────────────────────────────────
 
-# Escape URL for use in sed (handle + and . in the URL)
-ESCAPED_URL=$(printf '%s\n' "$NEW_URL" | sed 's/[[\.*^$()+?{|]/\\&/g')
+# Escape replacement-special chars for sed: \, &, and the | delimiter
+ESCAPED_URL=$(printf '%s\n' "$NEW_URL" | sed 's/[\\&|]/\\&/g')
 
 sed -i.bak "s|ARG LIMESURVEY_URL=.*|ARG LIMESURVEY_URL=${ESCAPED_URL}|" "$DOCKERFILE" \
     && rm "${DOCKERFILE}.bak"
@@ -103,9 +103,9 @@ read -rp "Rebuild and restart containers now? [y/N] " rebuild || true
 if [[ "${rebuild:-}" =~ ^[Yy]$ ]]; then
     echo
     info "Building..."
-    docker compose build --no-cache
+    docker compose build --no-cache || die "Build failed"
     info "Restarting containers..."
-    docker compose up -d
+    docker compose up -d || die "Failed to start containers"
     echo
     info "Done. LimeSurvey is updating at http://localhost:8505/limesurvey/admin/"
 else
