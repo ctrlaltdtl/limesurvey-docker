@@ -119,6 +119,8 @@ Run `./update.sh` — it automatically checks for a new release, updates the Doc
 ./update.sh
 ```
 
+After the containers restart, refresh the admin page. If the new version includes database schema changes, LimeSurvey will show a **Database upgrade** prompt — click **Start database upgrade** to proceed. This is expected and safe.
+
 To rebuild manually with a specific URL:
 
 1. Get the zip URL from [community.limesurvey.org/downloads](https://community.limesurvey.org/downloads/)
