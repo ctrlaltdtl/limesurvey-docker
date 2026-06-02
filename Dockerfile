@@ -53,6 +53,10 @@ RUN echo "Downloading LimeSurvey from: ${LIMESURVEY_URL}" \
     && chown -R www-data:www-data /var/www/html/limesurvey \
     && cp -rp /var/www/html/limesurvey/application/config /opt/limesurvey-config-template
 
+# Apply patches to LimeSurvey source
+COPY patches/ /patches/
+RUN php /patches/fix_statistics_listcolumn.php
+
 COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
