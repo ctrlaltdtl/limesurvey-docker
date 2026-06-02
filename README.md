@@ -88,6 +88,17 @@ Once the database is populated you will be taken to the **Administrator settings
 
 Hit **Next** to finalize. You will then be able to log in and create surveys at `http://localhost:8505/limesurvey/admin/`.
 
+## PDF export
+
+PDF export (queXML PDF) requires telling LimeSurvey where `wkhtmltopdf` lives. The binary is installed in the image, but LimeSurvey won't use it until you set the path — this is a one-time step after the web installer completes.
+
+1. Log in to the LimeSurvey admin UI
+2. Go to **Configuration → Global settings → General**
+3. Set **wkhtmltopdf path** to `/usr/bin/wkhtmltopdf`
+4. Save
+
+This setting is stored in the database and persists across container restarts and upgrades.
+
 ## Common commands
 
 ```bash
