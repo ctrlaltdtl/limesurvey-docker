@@ -8,6 +8,7 @@ RUN apt-get update && apt-get install -y \
     curl \
     unzip \
     ca-certificates \
+    wkhtmltopdf \
     && add-apt-repository ppa:ondrej/php \
     && apt-get update \
     && apt-get install -y \
